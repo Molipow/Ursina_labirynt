@@ -2,31 +2,34 @@ from ursina import *
 import random
 from level import Level
 import enemy
-import tile
+import tiles
 mapa = Level("map.txt")
 
 print(mapa.board)
 
-grid = list()
+walls = list()
+doors = list()
+empty = list()
+start = None
+end = None
+
 y = 0
 for line in mapa.board:
     x = 0
     for _tile in line:
         if _tile == "*":
-            tile_ = Entity(model='cube', color=color.red, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
-            grid.append(tile_)
+            tile_ = tiles.Wall(x, y)
+            walls.append(tile_)
         if _tile == " " or _tile == "@":
-            tile_ = Entity(model='cube', color=color.white, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
-            grid.append(tile_)
+            tile_ = tiles.Empty(x, y)
+            empty.append(tile_)
         if _tile == "%":
-            tile_ = Entity(model='cube', color=color.orange, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
-            grid.append(tile_)
+            tile_ = tiles.Door(x, y, 2)
+            doors.append(tile_)
         if _tile == "X":
-            tile_ = Entity(model='cube', color=color.green, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
-            grid.append(tile_)
+            end = Entity(model='cube', color=color.green, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
         if _tile == "P":
-            tile_ = Entity(model='cube', color=color.blue, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
-            grid.append(tile_)
+            start = Entity(model='cube', color=color.blue, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
         x+=1
     y+=1
       
