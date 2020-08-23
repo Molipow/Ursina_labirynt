@@ -1,15 +1,18 @@
 from ursina import *
 import random
 from level import Level
-import enemy
+import entities
 import tiles
 mapa = Level("map.txt")
+
+app = Ursina()
 
 print(mapa.board)
 
 walls = list()
 doors = list()
 empty = list()
+enemies = list()
 start = None
 end = None
 
@@ -20,7 +23,7 @@ for line in mapa.board:
         if _tile == "*":
             tile_ = tiles.Wall(x, y)
             walls.append(tile_)
-        if _tile == " " or _tile == "@":
+        if _tile == " ":
             tile_ = tiles.Empty(x, y)
             empty.append(tile_)
         if _tile == "%":
@@ -29,15 +32,27 @@ for line in mapa.board:
         if _tile == "X":
             end = Entity(model='cube', color=color.green, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
         if _tile == "P":
-            start = Entity(model='cube', color=color.blue, position=((x-10)/2, -(y-8)/2, 0), scale=(0.5,0.5,0.5))
+            start = tiles.Start(x, y)
+        if _tile == "@":
+            enemy = entities.Enemy(x, y)
+            enemies.append(enemy)
+            tile_ = tiles.Empty(x, y)
+            empty.append(tile_)
         x+=1
     y+=1
       
+player = entities.Player(start.x, start.y)
+
 random_generator = random.Random()      
 
 def update():
     pass
+# scene.camera.orthographic = True
 
+window.title = 'Labirynth'
+window.borderless = False
+window.fullscreen = False 
+window.exit_button.visible = False
+window.size = Vec2(800,800)
 
-app = Ursina()
 app.run()
